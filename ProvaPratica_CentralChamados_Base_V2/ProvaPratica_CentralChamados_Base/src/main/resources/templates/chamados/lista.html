@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chamados</title>
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+<main class="card">
+    <header>
+        <div>
+            <h1>Central de Chamados</h1>
+            <p>Gerencie as solicitações de suporte</p>
+        </div>
+        <a class="botao" th:href="@{/logout}">Sair</a>
+    </header>
+    <a class="botao" th:href="@{/chamados/novo}">Novo chamado</a>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${chamados}">
+            <td th:text="${item.id}"></td>
+            <td th:text="${item.titulo}"></td>
+            <td th:text="${item.descricao}"></td>
+            <td th:text="${item.status}"></td>
+            <td>
+
+                <!-- *NOTA*
+                    Aqui o mesmo cenário para criar o link de atualização
+                    o href recebe no link "/chamados/editar/{id}" <- o valor de (id=${item.id})
+                    dessa forma o link fica /chamados/editar/1 (com o valor que existe dentro do item.id
+                -->
+
+                <a th:href="@{/chamados/editar/{id}(id=${item.id})}">Editar</a>
+                <form class="inline" th:action="@{/chamados/excluir/{id}(id=${item.id})}" method="post">
+                    <button class="danger" type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${chamados != null and #lists.isEmpty(chamados)}">Nenhum chamado cadastrado.</p>
+</main>
+</body>
+</html>

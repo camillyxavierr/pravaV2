@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chamado</title>
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+<main class="card narrow">
+    <h1 th:text="${chamado.id == null} ? 'Novo chamado' : 'Editar chamado'">Chamado</h1>
+    <p th:if="${erro}" th:text="${erro}" class="erro"></p>
+
+    <!-- *NOTA*
+         Aqui na tag form é usado um operador ternário para o caso do chamado.id estar preenchido
+         significar que é uma atualização e assim ser um post em "/chamados/atualizar/{id}" <- colocando ali o (id=${chamado.id})
+         se o chamado id for null então é post em "/chamados/salvar"
+    -->
+
+    <form th:object="${chamado}" th:action="${chamado.id == null} ? @{/chamados/salvar} : @{/chamados/atualizar/{id}(id=${chamado.id})}" method="post">
+        <label>Título <input th:field="*{titulo}" required maxlength="100">
+        </label>
+        <label>Descrição <textarea th:field="*{descricao}" required maxlength="300"></textarea>
+        </label>
+        <label th:if="${chamado.id != null}">Status <select th:field="*{status}">
+            <option value="ABERTO">ABERTO</option>
+            <option value="EM_ANDAMENTO">EM_ANDAMENTO</option>
+            <option value="CONCLUIDO">CONCLUIDO</option>
+        </select>
+        </label>
+        <button>Salvar</button>
+        <a class="botao" th:href="@{/chamados}">Voltar</a>
+    </form>
+</main>
+</body>
+</html>
